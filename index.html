@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WRN Thanksgiving 2026 Textbank</title>
+<style>
+:root{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#203044;background:#f4f6f8}*{box-sizing:border-box}body{margin:0}.wrap{max-width:780px;margin:auto;padding:22px 16px 50px}header{background:#173c52;color:#fff}header .wrap{padding-top:22px;padding-bottom:22px}h1{font-size:1.5rem;margin:0 0 7px}header p{margin:0;color:#e0ebf0}h2{font-size:1.12rem;margin:0 0 13px}p{line-height:1.5}.switch,.actions{display:flex;gap:9px;flex-wrap:wrap}.switch{margin:20px 0}.switch button{flex:1}button{cursor:pointer;border:1px solid #aebbc6;border-radius:9px;padding:11px 15px;font-size:1rem;background:#fff;color:#173c52;font-weight:650}button.active,button.primary{background:#17668b;color:white;border-color:#17668b}button:focus-visible,input:focus-visible{outline:3px solid #eda93b;outline-offset:2px}.card{background:white;border:1px solid #d9e0e6;border-radius:12px;padding:20px;margin:14px 0;box-shadow:0 2px 6px #172a3b0a}.msg{white-space:pre-wrap;line-height:1.65;font-size:1.02rem;margin:0 0 16px}.hint{color:#536476;font-size:.94rem}.hidden{display:none}label{display:block;font-weight:650;margin-bottom:8px}input{width:100%;max-width:400px;padding:12px;font-size:1rem;border:1px solid #aebbc6;border-radius:8px}.toast{color:#17643e;min-height:20px;margin-top:7px;font-size:.9rem}.step{font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;color:#596e7e;font-weight:700;margin-bottom:8px}.summary{background:#eef4f7;border-radius:9px;padding:12px 14px;margin:14px 0}.summary p{margin:4px 0}.minor{font-size:.9rem}footer{color:#536476;font-size:.9rem;margin-top:22px}
+</style></head><body>
+<header><div class="wrap"><h1>Westside Resource Network — Thanksgiving Textbank</h1><p>November 22, 2026 · Vendor outreach</p></div></header>
+<main class="wrap">
+<div class="switch"><button id="esBtn" onclick="setLang('es')">Español</button><button id="enBtn" onclick="setLang('en')">English</button></div>
+<section class="card"><label id="nameLabel" for="name"></label><input id="name" autocomplete="given-name" oninput="updateName()" placeholder=""/><p id="nameHelp" class="hint"></p></section>
+<div id="workflow"></div>
+<footer id="foot"></footer>
+</main>
+<script>
+const data={
+es:{nameLabel:'Nombre de la persona que envía los textos',nameHelp:'Escriba su nombre una sola vez. Aparecerá automáticamente en el mensaje inicial.',namePlaceholder:'Su nombre',missing:'Escriba su nombre antes de copiar.',initial:'Mensaje inicial',response:'¿Qué respondió la persona?',yes:'Sí, le interesa',no:'No le interesa',copy:'Copiar mensaje',copied:'¡Copiado!',next:'Continuar',back:'Volver',restart:'Empezar con otra persona',countLabel:'¿Cuántas personas vienen con usted?',kidsLabel:'¿Cuántas/os son menores de 10 años?',record:'Registrar respuesta y continuar',numberHint:'Escriba el número que respondió la persona.',invalid:'Ingrese un número válido (0 o más).',summary:'Resumen de respuestas',attendees:'Personas que vienen con el vendedor',children:'Menores de 10 años',unknown:'No registrado',finish:'Conversación terminada',foot:'Copie y envíe cada mensaje por separado. Las respuestas no se envían a ningún servidor. Al comenzar con otra persona, se borran los números registrados.',intro:name=>`Hola! Me llamo ${name} y soy parte de Westside Resource Network, anteriormente conocido por Mar Vista Voice. Nosotros les dimos dinero por ser ambulantes. Algunos de ustedes asistieron a nuestro evento de Acción de Gracia hace un año.
+
+Este año tenemos planeado hacer otro el domingo 22 de Noviembre. El evento nomás será para los vendedores, que recibieron o que están por recibir su subvención de $500, y su familia inmediata como su esposa/o y hija/os que viven en su hogar.
+
+Aún no tenemos la localización confirmada pero será en Mar Vista. Queremos saber si usted está interesado/a en asistir.`,yes1:'¡Perfecto! ¿Cuántas personas vienen con usted?',yes2:'¿Cuántas/os son menores de 10 años?',yes3:'Gracias. Le vamos a enviar por texto la información del evento cuando tengamos todos los datos.',yes4:'Que tengas un buen dia!',no1:'No se precupe. Estaremos en contacto para ver si le podemos proveer algo de nuestra celebración.',no2:'Que tenga un buen dia'},
+en:{nameLabel:'Your name (the person sending texts)',nameHelp:'Enter your name once. It will automatically appear in the opening message.',namePlaceholder:'Your name',missing:'Enter your name before copying.',initial:'Initial message',response:'How did the vendor respond?',yes:'Yes, interested',no:'No, not interested',copy:'Copy message',copied:'Copied!',next:'Continue',back:'Back',restart:'Start another conversation',countLabel:'How many people are coming with you?',kidsLabel:'How many are under 10 years old?',record:'Record answer and continue',numberHint:'Enter the number the vendor gave you.',invalid:'Enter a valid number (0 or greater).',summary:'Response summary',attendees:'People coming with the vendor',children:'Children under 10',unknown:'Not recorded',finish:'Conversation complete',foot:'Copy and send each message separately. Responses are not sent to any server. Starting another conversation clears recorded counts.',intro:name=>`Hello! My name is ${name}, and I'm with Westside Resource Network, formerly known as Mar Vista Voice. We provided you with money for being street vendors. Some of you attended our Thanksgiving event a year ago.
+
+This year, we're planning another one on Sunday, November 22nd. The event will be exclusively for vendors who have received or are about to receive their $500 grant, and their immediate family, including spouses and children living at home.
+
+We don't have a confirmed location yet, but it will be in Mar Vista. We'd like to know if you're interested in attending.`,yes1:'Great! How many people are coming with you?',yes2:'How many are under 10 years old?',yes3:"Thank you. We'll text you the event information once we have all the details.",yes4:'Have a great day!',no1:"Don't worry. We'll be in touch to see if we can provide anything for you from our celebration.",no2:'Have a great day!'}};
+let lang='es',step='intro',branch=null,attendees='',children='';
+const $=id=>document.getElementById(id);
+function setLang(l){lang=l;document.documentElement.lang=l;for(const x of ['es','en']){$(x+'Btn').classList.toggle('active',x===l);$(x+'Btn').setAttribute('aria-pressed',String(x===l))}let d=data[l];$('nameLabel').textContent=d.nameLabel;$('nameHelp').textContent=d.nameHelp;$('name').placeholder=d.namePlaceholder;$('foot').textContent=d.foot;render()}
+function updateName(){render()}
+function setStep(s){step=s;render();$('workflow').scrollIntoView({behavior:'smooth',block:'nearest'})}
+function choose(b){branch=b;attendees='';children='';setStep(b==='yes'?'yes1':'no1')}
+function restart(){branch=null;attendees='';children='';setStep('intro')}
+function el(tag,cls,txt){let x=document.createElement(tag);if(cls)x.className=cls;if(txt!==undefined)x.textContent=txt;return x}
+function button(label,fn,primary=false){let b=el('button',primary?'primary':'',label);b.type='button';b.onclick=fn;return b}
+function render(){let d=data[lang],root=$('workflow');root.replaceChildren();let card=el('section','card'),small=el('div','step',step==='intro'?d.initial:step==='choice'?d.response:d.response);card.append(small);
+if(step==='intro'){card.append(el('h2','',d.initial));message(card,d.intro($('name').value.trim()),true);card.append(el('p','hint',d.response));let actions=el('div','actions');actions.append(button(d.yes,()=>choose('yes'),true),button(d.no,()=>choose('no')));card.append(actions)}
+else if(step==='yes1'||step==='yes2'||step==='yes3'||step==='yes4'||step==='no1'||step==='no2'){
+const isQuestion=step==='yes1'||step==='yes2';card.append(el('h2','',isQuestion?(step==='yes1'?d.countLabel:d.kidsLabel):step==='yes4'||step==='no2'?d.finish:d.response));message(card,d[step]);
+if(isQuestion){let label=el('label','',d.numberHint);let input=el('input');input.type='number';input.min='0';input.step='1';input.inputMode='numeric';input.value=step==='yes1'?attendees:children;input.id='answer';label.htmlFor='answer';card.append(label,input);let err=el('p','hint');card.append(err);card.append(button(d.record,()=>{let v=input.value.trim();if(v===''||!/^(0|[1-9]\d*)$/.test(v)){err.textContent=d.invalid;return}if(step==='yes1'){attendees=v;setStep('yes2')}else{children=v;setStep('yes3')}},true))}
+else if(step==='yes3')card.append(button(d.next,()=>setStep('yes4'),true));
+else if(step==='no1')card.append(button(d.next,()=>setStep('no2'),true));
+else card.append(button(d.restart,restart,true));
+card.append(el('div','', ''));card.append(button(d.back,()=>{let prev={yes1:'intro',yes2:'yes1',yes3:'yes2',yes4:'yes3',no1:'intro',no2:'no1'};setStep(prev[step])}));
+if(step==='yes3'||step==='yes4'){let summary=el('div','summary');summary.append(el('strong','',d.summary),el('p','',`${d.attendees}: ${attendees||d.unknown}`),el('p','',`${d.children}: ${children||d.unknown}`));card.append(summary)}
+}
+root.append(card)}
+function message(card,text,requiresName=false){let p=el('p','msg',text),copy=button(data[lang].copy,async()=>{if(requiresName&&!$('name').value.trim()){toast.textContent=data[lang].missing;$('name').focus();return}let ok=false;try{await navigator.clipboard.writeText(text);ok=true}catch(e){let a=el('textarea');a.value=text;document.body.append(a);a.select();ok=document.execCommand('copy');a.remove()}toast.textContent=ok?data[lang].copied:data[lang].copy;},true),toast=el('div','toast');toast.setAttribute('aria-live','polite');card.append(p,copy,toast)}
+setLang('es');
+</script></body></html>
